@@ -31,7 +31,7 @@ from pathlib import Path
 import networkx as nx
 import numpy as np
 
-GRAPH_DIR = Path(__file__).resolve().parent.parent.parent/ "graphs"
+GRAPH_DIR = Path(__file__).resolve().parent.parent / "graphs"
 GRAPHS = ["alzheimers", "covid_respiratory"]
 
 
