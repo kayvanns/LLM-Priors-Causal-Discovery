@@ -1,0 +1,19 @@
+{
+  "name": "alzheimers",
+  "source": "Srivastava et al. (2025), Fig. 1(a); consensus of 5 domain experts (edges kept if >= 2 of 5 agreed), from a 2023 study. Transcribed from the figure; verify tau->ventricular_volume and brain_volume->ventricular_volume directions against the source.",
+  "nodes": {
+    "age": "Age", "sex": "Sex", "apoe4": "APOE4 genotype", "education": "Years of education",
+    "av45": "Amyloid PET (AV45)", "tau": "Tau pathology", "brain_volume": "Whole-brain volume",
+    "ventricular_volume": "Ventricular volume", "moca": "MoCA cognitive score",
+    "brain_mri": "Brain MRI image", "slice_number": "MRI slice number"
+  },
+  "edges": [
+    ["age", "moca"], ["age", "ventricular_volume"], ["age", "brain_volume"], ["age", "av45"], ["age", "tau"],
+    ["sex", "ventricular_volume"], ["sex", "brain_volume"],
+    ["apoe4", "av45"], ["education", "moca"],
+    ["av45", "tau"], ["av45", "brain_volume"],
+    ["tau", "brain_volume"], ["tau", "ventricular_volume"], ["tau", "moca"],
+    ["brain_volume", "ventricular_volume"], ["brain_volume", "moca"], ["brain_volume", "brain_mri"],
+    ["ventricular_volume", "brain_mri"], ["slice_number", "brain_mri"]
+  ]
+}
