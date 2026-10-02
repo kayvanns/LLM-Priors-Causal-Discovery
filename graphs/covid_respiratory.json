@@ -14,14 +14,33 @@
     "X10": "Dry cough",
     "X11": "Productive cough"
   },
-  "edges": [
-    ["X1", "X2"], ["X1", "X5"],
-    ["X2", "X3"], ["X2", "X5"], ["X2", "X7"], ["X2", "X8"], ["X2", "X10"],
-    ["X3", "X4"],
-    ["X5", "X6"], ["X5", "X7"], ["X5", "X8"], ["X5", "X9"], ["X5", "X11"],
-    ["X6", "X7"], ["X6", "X8"], ["X6", "X9"],
-    ["X7", "X8"],
-    ["X8", "X9"],
-    ["X9", "X10"], ["X9", "X11"]
-  ]
+"edges": [
+  ["Virus enters upper respiratory tract (URT)", "URT epithelial infection"],
+  ["Virus enters upper respiratory tract (URT)", "Alveolar epithelial infection"],
+
+  ["URT epithelial infection", "Infection of olfactory epithelium"],
+  ["URT epithelial infection", "Alveolar epithelial infection"],
+  ["URT epithelial infection", "Viremia"],
+  ["URT epithelial infection", "Systemic immune/inflammatory response"],
+  ["URT epithelial infection", "Dry cough"],
+
+  ["Infection of olfactory epithelium", "Anosmia and/or ageusia"],
+
+  ["Alveolar epithelial infection", "Alveolar endothelial infection"],
+  ["Alveolar epithelial infection", "Viremia"],
+  ["Alveolar epithelial infection", "Systemic immune/inflammatory response"],
+  ["Alveolar epithelial infection", "Pulmonary capillary leakage"],
+  ["Alveolar epithelial infection", "Productive cough"],
+
+  ["Alveolar endothelial infection", "Viremia"],
+  ["Alveolar endothelial infection", "Systemic immune/inflammatory response"],
+  ["Alveolar endothelial infection", "Pulmonary capillary leakage"],
+
+  ["Viremia", "Systemic immune/inflammatory response"],
+
+  ["Systemic immune/inflammatory response", "Pulmonary capillary leakage"],
+
+  ["Pulmonary capillary leakage", "Dry cough"],
+  ["Pulmonary capillary leakage", "Productive cough"]
+]
 }

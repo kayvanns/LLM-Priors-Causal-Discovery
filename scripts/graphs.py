@@ -40,7 +40,7 @@ def load_graph(name):
     with open(GRAPH_DIR / f"{name}.json") as f:
         raw = json.load(f)
 
-    names = list(raw["nodes"])
+    names = list(raw["nodes"].values())
     edges = [(a, b) for a, b in raw["edges"]]
 
     G = nx.DiGraph()
@@ -59,7 +59,7 @@ def load_graph(name):
         "names": names,
         "edges": edges,
         "descriptions": raw["nodes"],
-        "G": G,
+        # "G": G,
         "index": {v: i for i, v in enumerate(names)},
         "order": list(nx.topological_sort(G)),
     }
@@ -142,5 +142,6 @@ def summary(dag):
 
 
 if __name__ == "__main__":
-    for g in GRAPHS:
-        print(summary(load_graph(g)))
+    # for g in GRAPHS:
+    #     print(summary(load_graph(g)))
+    print(json.dumps(load_graph("covid_respiratory")))
