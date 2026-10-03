@@ -26,22 +26,23 @@ from graphs import load_graph, nonadjacent_pairs
 
 ERROR_TYPES = ["false_positive", "false_negative", "wrong_direction"]
 
+def shuffled(items, rng):
+    """A shuffled copy. Shuffling once and taking the first k is what makes errors nest."""
+    out = list(items)
+    rng.shuffle(out)
+    return out
+
 
 def correct_knowledge(dag, coverage, rng):
     """Required: a `coverage` share of true edges (true direction).
     Forbidden: the same number of truly non-adjacent pairs."""
     edges = list(dag["edges"])
     n = round(coverage * len(edges))
-    required = rng.sample(edges, n)
-    forbidden = rng.sample(nonadjacent_pairs(dag), n)
+    required = shuffled(dag["edges"], rng)[:n]
+    forbidden = shuffled(nonadjacent_pairs(dag), rng)[:n]
     return {"required": required, "forbidden": forbidden}
 
 
-def shuffled(items, rng):
-    """A shuffled copy. Shuffling once and taking the first k is what makes errors nest."""
-    out = list(items)
-    rng.shuffle(out)
-    return out
 
 
 def corrupt(K, dag, error_type, e, rng):
@@ -89,12 +90,12 @@ def corrupt(K, dag, error_type, e, rng):
 
 def make_knowledge(dag, coverage, seed, error_type=None, e=0.0):
     """Correct hints for this seed, corrupted by `error_type` at rate `e`.
-
-    The correct set depends only on (seed, coverage), so every error type and rate starts
-    from the same hints. The corruption depends only on (seed, error_type), so errors nest
-    across rates.
+ 
+    The correct set depends only on the seed (and coverage, with smaller coverages nested
+    inside larger ones), so every error type and rate starts from the same hints. The
+    corruption depends only on (seed, error_type), so errors nest across rates.
     """
-    K = correct_knowledge(dag, coverage, random.Random(f"{seed}-K-{coverage}"))
+    K = correct_knowledge(dag, coverage, random.Random(f"{seed}-K"))
     if error_type is None or e == 0:
         return K
     return corrupt(K, dag, error_type, e, random.Random(f"{seed}-{error_type}"))
