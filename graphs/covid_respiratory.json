@@ -2,45 +2,45 @@
   "name": "covid_respiratory",
   "source": "Srivastava et al. (2025), Fig. 1(b); expert-consensus graph from a Feb 2022 medRxiv study",
   "nodes": {
-    "X1": "Virus enters upper respiratory tract (URT)",
-    "X2": "URT epithelial infection",
-    "X3": "Infection of olfactory epithelium",
-    "X4": "Anosmia and/or ageusia",
-    "X5": "Alveolar epithelial infection",
-    "X6": "Alveolar endothelial infection",
-    "X7": "Viremia",
-    "X8": "Systemic immune/inflammatory response",
-    "X9": "Pulmonary capillary leakage",
-    "X10": "Dry cough",
-    "X11": "Productive cough"
+    "virus_urt": "Virus enters upper respiratory tract (URT)",
+    "urt_infection": "URT epithelial infection",
+    "olfactory_infection": "Infection of olfactory epithelium",
+    "anosmia": "Anosmia and/or ageusia",
+    "alveolar_epithelial": "Alveolar epithelial infection",
+    "alveolar_endothelial": "Alveolar endothelial infection",
+    "viremia": "Viremia",
+    "systemic_inflammation": "Systemic immune/inflammatory response",
+    "capillary_leakage": "Pulmonary capillary leakage",
+    "dry_cough": "Dry cough",
+    "productive_cough": "Productive cough"
   },
-"edges": [
-  ["Virus enters upper respiratory tract (URT)", "URT epithelial infection"],
-  ["Virus enters upper respiratory tract (URT)", "Alveolar epithelial infection"],
+  "edges": [
+    ["virus_urt", "urt_infection"],
+    ["virus_urt", "alveolar_epithelial"],
 
-  ["URT epithelial infection", "Infection of olfactory epithelium"],
-  ["URT epithelial infection", "Alveolar epithelial infection"],
-  ["URT epithelial infection", "Viremia"],
-  ["URT epithelial infection", "Systemic immune/inflammatory response"],
-  ["URT epithelial infection", "Dry cough"],
+    ["urt_infection", "olfactory_infection"],
+    ["urt_infection", "alveolar_epithelial"],
+    ["urt_infection", "viremia"],
+    ["urt_infection", "systemic_inflammation"],
+    ["urt_infection", "dry_cough"],
 
-  ["Infection of olfactory epithelium", "Anosmia and/or ageusia"],
+    ["olfactory_infection", "anosmia"],
 
-  ["Alveolar epithelial infection", "Alveolar endothelial infection"],
-  ["Alveolar epithelial infection", "Viremia"],
-  ["Alveolar epithelial infection", "Systemic immune/inflammatory response"],
-  ["Alveolar epithelial infection", "Pulmonary capillary leakage"],
-  ["Alveolar epithelial infection", "Productive cough"],
+    ["alveolar_epithelial", "alveolar_endothelial"],
+    ["alveolar_epithelial", "viremia"],
+    ["alveolar_epithelial", "systemic_inflammation"],
+    ["alveolar_epithelial", "capillary_leakage"],
+    ["alveolar_epithelial", "productive_cough"],
 
-  ["Alveolar endothelial infection", "Viremia"],
-  ["Alveolar endothelial infection", "Systemic immune/inflammatory response"],
-  ["Alveolar endothelial infection", "Pulmonary capillary leakage"],
+    ["alveolar_endothelial", "viremia"],
+    ["alveolar_endothelial", "systemic_inflammation"],
+    ["alveolar_endothelial", "capillary_leakage"],
 
-  ["Viremia", "Systemic immune/inflammatory response"],
+    ["viremia", "systemic_inflammation"],
 
-  ["Systemic immune/inflammatory response", "Pulmonary capillary leakage"],
+    ["systemic_inflammation", "capillary_leakage"],
 
-  ["Pulmonary capillary leakage", "Dry cough"],
-  ["Pulmonary capillary leakage", "Productive cough"]
-]
+    ["capillary_leakage", "dry_cough"],
+    ["capillary_leakage", "productive_cough"]
+  ]
 }
