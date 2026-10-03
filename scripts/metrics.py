@@ -87,4 +87,82 @@ def graph_metrics(cg, dag):
         "arrow_precision": arr_p, "arrow_recall": arr_r, "arrow_f1": f1(arr_p, arr_r),
     }
  
+
+def learned_adjustment_set(cg, dag, T):
+    """Parents of T in the learned graph.
  
+    Returns (Z, status). If any edge at T has no clear direction ("--" or "<->"),
+    the learned graph does not say what T's parents are: status "not_identified".
+    """
+    names = dag["names"]
+    Z = set()
+    for v in names:
+        if v == T:
+            continue
+        s = edge_state(cg, names, v, T)
+        if s == "->":
+            Z.add(v)
+        elif s in ("--", "<->"):
+            return None, "not_identified"
+    return Z, "ok"
+ 
+ 
+def ols_effect(X, dag, T, Y, Z):
+    """OLS of Y on an intercept, T and Z. Returns (coefficient on T, its standard error)."""
+    idx = dag["index"]
+    cols = [idx[T]] + [idx[z] for z in sorted(Z)]
+    design = np.column_stack([np.ones(len(X)), X[:, cols]])
+    y = X[:, idx[Y]]
+    beta, *_ = np.linalg.lstsq(design, y, rcond=None)
+    resid = y - design @ beta
+    dof = len(y) - design.shape[1]
+    sigma2 = resid @ resid / dof
+    cov = sigma2 * np.linalg.inv(design.T @ design)
+    return float(beta[1]), float(np.sqrt(cov[1, 1]))
+ 
+ 
+def adjustment_metrics(cg, dag, X, B):
+    """One row per confounded (T, Y) pair: is the learned adjustment set valid, and does
+    the resulting effect estimate lead to a materially different conclusion?"""
+    rows = []
+    for T, Y in confounded_pairs(dag):
+        # Reference: a correct adjustment set (true parents of T), same data
+        ref_est, ref_se = ols_effect(X, dag, T, Y, parents(dag, T))
+        ref_lo, ref_hi = ref_est - Z_95 * ref_se, ref_est + Z_95 * ref_se
+ 
+        row = {
+            "T": T, "Y": Y,
+            "true_effect": true_total_effect(dag, B, T, Y),
+            "ref_est": ref_est, "ref_lo": ref_lo, "ref_hi": ref_hi,
+            "adj_set": None, "est": np.nan,
+            "valid": False, "sign_flip": False, "material": True,
+        }
+ 
+        Z, status = learned_adjustment_set(cg, dag, T)
+        if status == "ok" and Y in Z:
+            status = "reversed"            # learned graph says Y causes T
+        row["status"] = status
+ 
+        if status == "ok":
+            est, _ = ols_effect(X, dag, T, Y, Z)
+            sign_flip = np.sign(est) != np.sign(ref_est)
+            outside = est < ref_lo or est > ref_hi
+            row.update({
+                "adj_set": ",".join(sorted(Z)),
+                "est": est,
+                "valid": is_valid_adjustment(dag, T, Y, Z),
+                "sign_flip": bool(sign_flip),
+                "material": bool(sign_flip or outside),
+            })
+        rows.append(row)
+    return rows
+ 
+ 
+def summarize_adjustment(rows):
+    """Shares across all pairs in one run (for quick printing)."""
+    n = len(rows)
+    return {
+        "p_valid": sum(r["valid"] for r in rows) / n,
+        "p_material": sum(r["material"] for r in rows) / n,
+        "p_not_identified": sum(r["status"] == "not_identified" for r in rows) / n,
+    }
