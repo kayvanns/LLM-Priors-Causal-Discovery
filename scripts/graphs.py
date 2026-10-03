@@ -36,11 +36,11 @@ GRAPHS = ["alzheimers", "covid_respiratory"]
 
 
 def load_graph(name):
-    """Read data/graphs/<name>.json and return the graph as a dictionary."""
+    """Read graphs/<name>.json and return the graph as a dictionary."""
     with open(GRAPH_DIR / f"{name}.json") as f:
         raw = json.load(f)
 
-    names = list(raw["nodes"].values())
+    names = list(raw["nodes"]) 
     edges = [(a, b) for a, b in raw["edges"]]
 
     G = nx.DiGraph()
@@ -59,7 +59,7 @@ def load_graph(name):
         "names": names,
         "edges": edges,
         "descriptions": raw["nodes"],
-        # "G": G,
+        "G": G,
         "index": {v: i for i, v in enumerate(names)},
         "order": list(nx.topological_sort(G)),
     }
@@ -142,6 +142,5 @@ def summary(dag):
 
 
 if __name__ == "__main__":
-    # for g in GRAPHS:
-    #     print(summary(load_graph(g)))
-    print(json.dumps(load_graph("covid_respiratory")))
+    for g in GRAPHS:
+        print(summary(load_graph(g)))
