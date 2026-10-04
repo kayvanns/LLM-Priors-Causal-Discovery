@@ -85,7 +85,7 @@ No hints: 0.95 (Alzheimer's) and 0.97 (COVID-19).
 4. **Wrongly saying two variables are not linked did not hurt.** On COVID-19 it even helped slightly, because removing those links let PC settle directions it had otherwise left undecided.
 5. **More data did not help.** Because PC is forced to obey the hints, a bigger sample cannot correct a wrong one.
 
-**Takeaway:** when using LLM hints for causal discovery, direction claims need to be highly reliable; "not linked" claims are the safer kind of hint.
+**Takeaway:** For causal discovery, not all LLM errors are equally dangerous. An incorrect edge direction can propagate through the graph and change downstream adjustment decisions, while an incorrect claim that two variables are connected may have much more localized consequences.
 
 ## Limitations
 
